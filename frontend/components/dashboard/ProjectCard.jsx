@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteProject, updateProject } from "../../actions/project";
+import { deleteProject, updateProject } from "../../src/actions/project";
 import { format } from "date-fns";
 
 const ProjectCard = ({ project }) => {

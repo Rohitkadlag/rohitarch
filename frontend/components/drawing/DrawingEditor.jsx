@@ -3,14 +3,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Stage, Layer, Group } from "react-konva";
-import { getDrawing, updateDrawing } from "../../actions/drawing";
+import { getDrawing, updateDrawing } from "../../src/actions/drawing";
 import {
   getElements,
   createElement,
   updateElement,
   deleteElement,
   batchUpdateElements,
-} from "../../actions/element";
+} from "../../src/actions/element";
 
 import Grid from "./Grid";
 import Properties from "./Properties";
