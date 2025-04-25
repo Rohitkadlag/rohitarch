@@ -1,23 +1,17 @@
-// middleware/auth.js
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const User = require("../models/User");
+const mongoose = require("mongoose");
 
 module.exports = async function (req, res, next) {
-  // Get token from header
-  const token = req.header("x-auth-token");
+  // TEMPORARY: Skip authentication for development
+  console.warn("Authentication middleware bypassed for development");
 
-  // Check if no token
-  if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" });
-  }
+  // Create a valid MongoDB ObjectId for development
+  const devUserId = new mongoose.Types.ObjectId();
 
-  // Verify token
-  try {
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
-    req.user = await User.findById(decoded.id).select("-password");
-    next();
-  } catch (err) {
-    res.status(401).json({ msg: "Token is not valid" });
-  }
+  // Mock a user for development
+  req.user = {
+    id: devUserId,
+    name: "Development User",
+  };
+
+  next();
 };

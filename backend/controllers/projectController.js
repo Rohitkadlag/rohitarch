@@ -20,6 +20,32 @@ exports.getProjects = async (req, res) => {
 // @desc    Create new project
 // @route   POST /api/projects
 // @access  Private
+// exports.createProject = async (req, res) => {
+//   try {
+//     const { title, description, metadata } = req.body;
+
+//     const newProject = new Project({
+//       title,
+//       description,
+//       owner: req.user.id,
+//       metadata,
+//     });
+
+//     const project = await newProject.save();
+
+//     // Add project to user's projects array
+//     await User.findByIdAndUpdate(req.user.id, {
+//       $push: { projects: project._id },
+//     });
+
+//     res.json(project);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server Error");
+//   }
+// };
+// backend/controllers/projectController.js
+// backend/controllers/projectController.js
 exports.createProject = async (req, res) => {
   try {
     const { title, description, metadata } = req.body;
@@ -27,21 +53,19 @@ exports.createProject = async (req, res) => {
     const newProject = new Project({
       title,
       description,
-      owner: req.user.id,
+      owner: req.user.id, // Use the generated ObjectId
       metadata,
     });
 
     const project = await newProject.save();
 
-    // Add project to user's projects array
-    await User.findByIdAndUpdate(req.user.id, {
-      $push: { projects: project._id },
-    });
-
     res.json(project);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.error("Project creation error:", err);
+    res.status(500).json({
+      msg: "Server error creating project",
+      error: err.message,
+    });
   }
 };
 

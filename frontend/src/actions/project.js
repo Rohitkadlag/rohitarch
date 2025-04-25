@@ -1,5 +1,5 @@
 // src/actions/project.js
-import axios from "axios";
+import api from "../../utils/api";
 import {
   GET_PROJECTS,
   GET_PROJECT,
@@ -14,7 +14,7 @@ import { setAlert } from "./alert";
 // Get all projects
 export const getProjects = () => async (dispatch) => {
   try {
-    const res = await axios.get("/api/projects");
+    const res = await api.get("/projects");
 
     dispatch({
       type: GET_PROJECTS,
@@ -31,36 +31,10 @@ export const getProjects = () => async (dispatch) => {
   }
 };
 
-// Get project by ID
-export const getProject = (id) => async (dispatch) => {
-  try {
-    const res = await axios.get(`/api/projects/${id}`);
-
-    dispatch({
-      type: GET_PROJECT,
-      payload: res.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: PROJECT_ERROR,
-      payload: {
-        msg: err.response?.statusText,
-        status: err.response?.status,
-      },
-    });
-  }
-};
-
 // Create a project
 export const createProject = (formData) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const res = await axios.post("/api/projects", formData, config);
+    const res = await api.post("/projects", formData);
 
     dispatch({
       type: ADD_PROJECT,
@@ -71,6 +45,12 @@ export const createProject = (formData) => async (dispatch) => {
 
     return res.data; // Return for redirect
   } catch (err) {
+    const errors = err.response?.data?.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+
     dispatch({
       type: PROJECT_ERROR,
       payload: {

@@ -1,4 +1,4 @@
-// models/Element.js
+// backend/models/Element.js
 const mongoose = require("mongoose");
 
 const ElementSchema = new mongoose.Schema({

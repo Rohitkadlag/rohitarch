@@ -1,5 +1,6 @@
 // models/Project.js
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 const ProjectSchema = new mongoose.Schema({
   title: {
@@ -10,16 +11,17 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: ObjectId,
     ref: "User",
     required: true,
   },
   collaborators: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User",
     },
   ],
+
   drawings: [
     {
       type: mongoose.Schema.Types.ObjectId,

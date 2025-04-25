@@ -1,5 +1,6 @@
 // src/actions/auth.js
 import axios from "axios";
+import setAuthToken from "../../utils/setAuthToken";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -11,11 +12,10 @@ import {
   CLEAR_PROJECTS,
 } from "./types";
 import { setAlert } from "./alert";
-import setAuthToken from "../utils/setAuthToken";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
-  // Set token in headers if it exists in localStorage
+  // Check if token exists in localStorage
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
@@ -54,6 +54,8 @@ export const register =
         payload: res.data,
       });
 
+      // Set token and load user
+      setAuthToken(res.data.token);
       dispatch(loadUser());
     } catch (err) {
       const errors = err.response?.data?.errors;
@@ -86,6 +88,8 @@ export const login = (email, password) => async (dispatch) => {
       payload: res.data,
     });
 
+    // Set token and load user
+    setAuthToken(res.data.token);
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response?.data?.errors;
@@ -100,8 +104,14 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-// Logout / Clear Profile
+// Logout
 export const logout = () => (dispatch) => {
+  // Remove token
+  setAuthToken(false);
+
+  // Clear projects
   dispatch({ type: CLEAR_PROJECTS });
+
+  // Logout user
   dispatch({ type: LOGOUT });
 };

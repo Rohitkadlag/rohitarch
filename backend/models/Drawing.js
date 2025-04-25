@@ -1,3 +1,4 @@
+// backend/models/Drawing.js
 const mongoose = require("mongoose");
 
 const DrawingSchema = new mongoose.Schema({
