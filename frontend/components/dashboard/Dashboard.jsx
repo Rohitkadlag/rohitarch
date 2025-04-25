@@ -411,7 +411,33 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getProjects, createProject } from "../../src/actions/project";
-import ProjectCard from "./ProjectCard";
+// import ProjectCard from "./ProjectCard";
+
+// import { useNavigate } from "react-router-dom";
+
+const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+
+  const handleOpenProject = (project) => {
+    console.log("Project data:", project);
+    console.log("Drawings:", project.drawings);
+
+    if (project.drawings && project.drawings.length > 0) {
+      console.log("Navigating to drawing:", project.drawings[0]);
+      navigate(`/projects/${project._id}/drawings/${project.drawings[0]}`);
+    } else {
+      console.log("No drawings found for this project");
+      navigate(`/projects/${project._id}`);
+    }
+  };
+
+  return (
+    <div className="project-card" onClick={handleOpenProject}>
+      <h3>{project.name}</h3>
+      <p>{project.description}</p>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -479,6 +505,7 @@ const Dashboard = () => {
     // Create project and navigate to its page if successful
     const result = await dispatch(createProject(projectData));
     if (result && result._id) {
+      // Navigate to the project detail view
       navigate(`/projects/${result._id}`);
     }
 
@@ -812,12 +839,21 @@ const Dashboard = () => {
                 </span>
 
                 <div className="flex items-center space-x-2">
-                  <Link
-                    to={`/projects/${project._id}`}
+                  <button
+                    onClick={() => {
+                      if (project.drawings && project.drawings.length > 0) {
+                        navigate(
+                          `/projects/${project._id}/drawings/${project.drawings[0]}`
+                        );
+                      } else {
+                        // Create new drawing option here
+                        navigate(`/projects/${project._id}`);
+                      }
+                    }}
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     Open
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

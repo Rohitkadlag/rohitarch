@@ -10,6 +10,7 @@ import {
   CLEAR_PROJECTS,
 } from "./types";
 import { setAlert } from "./alert";
+import axios from "axios"; // This is missing
 
 // Get all projects
 export const getProjects = () => async (dispatch) => {
